@@ -1,25 +1,25 @@
 <template>
   <ul>
-    <li v-for="(item, index) in data" :key="index" @click.stop="toggle(item)">
-      {{item.text}}
-      <tree :data="item.children" v-if="item.isShow"/>
+    <li v-for="item in data" :key="item.text" @click.stop="handleClick(item)">
+      {{ item.text }}
+      <Tree :data="item.children" v-if="item.expanded"/>
     </li>
   </ul>
 </template>
 
 <script>
-  export default {
-    name: 'tree',
-    props: ['data'],
-    methods: {
-      toggle (item) {
-        console.log('toggle()', item)
-        if (item.hasOwnProperty('isShow')) {
-          item.isShow = !item.isShow
-        } else {
-          this.$set(item, 'isShow', true)
-        }
+export default {
+  name: 'Tree',
+  props: ['data'],
+  methods: {
+    handleClick (item) {
+      if (item.hasOwnProperty('expanded')) {
+        item.expanded = !item.expanded
+      } else {
+        // 向响应式对象item添加响应式数据
+        this.$set(item, 'expanded', true)
       }
     }
   }
+}
 </script>

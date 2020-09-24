@@ -2,7 +2,7 @@
   <div>
     <h2>祖组件标题</h2>
     <p @click="content1 += '--'">{{content1}}</p>
-    <p @click="content2= {name: '++++'}">{{content2.name}}</p>
+    <p @click="content2.name += '++++'">{{content2.name}}</p>
     <hr>
     <Child/>
   </div>

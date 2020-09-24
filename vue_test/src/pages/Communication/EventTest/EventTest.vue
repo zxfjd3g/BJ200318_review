@@ -30,6 +30,7 @@
     <br>
     <br>
     <event2 @click="test3" @xxx="test4($event)"/>
+    <!-- <event2 @click="test3" @xxx="($event) => test4()"/> -->
 
 
 
