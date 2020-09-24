@@ -36,10 +36,8 @@
   const Posts = () => import('./components/Posts')
 
   setTimeout(() => {
-    import('./math').then(module => {
+    import('./components/Posts').then(module => {
       console.log(module)
-      console.log(module.sum(1, 2))
-      console.log(module.default(1, 2))
     })
   }, 2000);
 
@@ -55,8 +53,10 @@
 
     methods: {
       loadModule () {
-         import('./components/Posts').then(module => {
+        import('./math').then(module => {
           console.log(module)
+          console.log(module.sum(1, 2))
+          console.log(module.default(1, 2))
         })
       }
     },
