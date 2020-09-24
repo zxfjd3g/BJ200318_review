@@ -8,7 +8,7 @@
 #### 2) 全局API
 
 - Vue的一些方法
-- Vue.component()
+- Vue.component(): 注册全局组件
 - Vue.directive()
 - Vue.filter()
 - Vue.use()
@@ -196,15 +196,47 @@
 
 #### 1) 动态组件
 
+- 通过<component>动态确定要显示的组件,  is指定要显示组件的组件名
 
+```vue
+<component :is="currentComp" />
+```
+
+- 问题: 当从A组件切换到B组件时, A组件就会销毁
 
 #### 2) 缓存组件
 
+- 使用<keep-alive>缓存动态组件, 可以通过include或exclude指定只缓存特定组件
 
+```vue
+<keep-alive :exclude="['Home']">
+	<component :is="currentComp"/>
+</keep-alive>
+```
+
+- 使用<keep-alive>也可以缓存路由组件
+
+```vue
+<keep-alive include="Life1">
+	<router-view></router-view>
+</keep-alive>
+```
+
+- 路由组件对象什么时候创建?
+- 路由组件对象什么时候死亡?
 
 #### 3) 异步组件
 
+- 无论是**路由组件**还是**非路由组件**都可以实现异步组件效果
+  - 拆分单独打包
+  - 需要时才请求加载组件对应的打包文件
 
+- 配置组件: component: () => import(modulePath)
+  - import(modulePath): 被引入的模块会被单独打包(code split)      --ES8的新语法
+  - () => import(modulePath): 函数开始不调用, 当第一次需要显示对应的界面时才会执行, 请求加载打包文件
+- 细节
+  - import()返回promise, promise成功的结果就是整体模块对象
+  -  本质上: 可以利用import()实现对任意模块的懒加载
 
 #### 4) 函数式组件
 
