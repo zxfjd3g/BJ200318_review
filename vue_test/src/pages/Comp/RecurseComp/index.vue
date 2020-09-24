@@ -13,7 +13,8 @@
         data: [
           {
             text: 1,
-            children: [{
+            children: [
+              {
               text: '1-1',
               children: [{
                 text: '1-1-1',

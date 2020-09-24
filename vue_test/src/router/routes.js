@@ -30,6 +30,7 @@ export default [
       {
         path: 'dca',
         component: DynamicCacheAsync,
+        
       },
       {
         path: 'functional',
@@ -77,3 +78,5 @@ export default [
     ],
   },
 ]
+
+// const test = () => ({})
