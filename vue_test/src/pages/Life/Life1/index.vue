@@ -14,7 +14,7 @@
 <script>
   import Child from './Child'
   export default {
-    name: 'Life1',
+    name: 'Life1',  // 路由组件一定要有name配置
 
     data () {
       return {
