@@ -2,10 +2,17 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+import myPlugin from '@/pages/Reuse/vue-myPlugin'
 import App from './App.vue'
 import router from './router'
 
 Vue.use(ElementUI)
+Vue.use(myPlugin) 
+/* 
+Vue.use()内部做了什么?
+对象插件: 调用插件对象install方法(传入Vue)来安装插件(执行定义新语法的代码)
+函数插件: 直接将其作为install来调用(传入Vue)来安装插件(执行定义新语法的代码)
+*/
 
 Vue.config.productionTip = false
 

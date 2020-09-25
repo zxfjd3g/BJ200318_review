@@ -342,7 +342,7 @@ export default {
   - 这里涉及下面几个重点
     - 数据代理: Object.defineProperty()
     - 数据劫持: Object.defineProperty()
-    - 发布-订阅模式: observer 与 dep 与 watcher
+    - 发布-订阅: observer 与 dep 与 watcher
 
 - 数据代理 
   - 通过Object.defineProperty()给vm添加与data对象中对应的属性
@@ -356,8 +356,8 @@ export default {
   - 在getter中, 去建立dep与watcher之间的关系
     - dep与data中的属性一一对应
     - watcher与模板中的表达式一一对应
-    - 一个dep中, 保存了包含n个watcher的数组,    当多个表达式用到当前dep所对应的属性
-    - 一个watcher中, 保存了包含n个dep的对象
+    - 一个dep中, 保存了包含n个watcher的数组  ==> 当多个表达式用到当前dep所对应的属性
+    - 一个watcher中, 保存了包含n个dep的对象 ==> 当表达式是一个我层的表达式
   - 在setter中, 通过dep去通知所有watcher去更新对应的节点
 - 发布-订阅模式
   - 发布者: observer
@@ -375,12 +375,17 @@ export default {
 - v-model的本质
   - 将动态的data数据通过value属性传给input显示  ==> data到view的绑定
   - 给input标签绑定input监听, 一旦输入改变读取最新的值保存到data对应的属性上 ==> view到data的绑定
+- 双向数据绑定是在单向数据绑定(data-->view)的基础, 加入input事件监听(view ==> data)
 
 
 
 ### 可复用性
 
 #### 1) mixin(混入)
+
+- 用来复用多个组件中相关的js代码的技术
+- 将多个组件相同的js代码提取出来, 定义在一个mixin中配置对象
+- 在多个组件中通过mixins配置引入mixin中的代码, 会自动合并到当前组件的配置中
 
 #### 2) 自定义指令
 
@@ -476,8 +481,6 @@ export default {
 - 路由守卫与权限校验
   - router.beforeEach()注册全局前置守卫
   - 统一对用户权限进行一系列的校验处理
-- 重复跳转到当前路由且参数不变, 会抛出错误警告?
-  - 
 - history与hash路由的区别和原理
   - 区别:
     - history:  路由路径不#, 刷新会携带路由路径, 默认会出404问题, 需要配置返回首页

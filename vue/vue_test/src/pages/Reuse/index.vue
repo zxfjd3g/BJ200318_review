@@ -1,7 +1,8 @@
 <template>
   <div>
-    <hint-button title="添加" type="primary" icon="el-icon-plus"></hint-button>
-    
+    <hint-button title="添加商品" type="primary" icon="el-icon-plus"/>
+    <HintButton title="删除商品" type="danger" icon="el-icon-delete"/>
+
     <p v-upper-text="msg"></p>
 
     <p>{{startTime | date-format}}</p>

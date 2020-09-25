@@ -8,5 +8,9 @@
 export default {
   name: 'HintButton',
   props: ['title'],
+
+  created () {
+    console.log(this.$attrs, this.$listeners)
+  },
 }
 </script>
