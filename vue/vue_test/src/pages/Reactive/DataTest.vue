@@ -18,16 +18,16 @@
 <script>
 export default {
   name: 'DataTest',
-  props: ['msg3'],
+  props: ['msg3'], // 是
   data () {
-    this.msg2 = 'ABC'
+    this.msg2 = 'ABC' // 不是
     return {
-      msg1: 'abc'
+      msg1: 'abc' // 是
     }
   },
 
   computed: {
-    msgLength () {
+    msgLength () { // 是
       return this.msg1.length
     }
   },
