@@ -154,6 +154,9 @@
             办法2: 重写VueRouter原型上的push方法 (比较好)
                 1). 如果没有指定回调函数, 需要调用原本的push()后catch()来处理错误的promise
                 2). 如果传入了回调函数, 本身就没问题, 直接调用原本的push()就可以
+
+								push(location, onComplete, onAbort)
+								push(locatoin).then(onComplete, onAbort)
     6). 将路由参数映射成props传递给路由组件对象
         路由: props: route => ({keyword3: route.params.keyword, keyword4: route.query.keyword2})
         组件读取: 接收props属性必须声明

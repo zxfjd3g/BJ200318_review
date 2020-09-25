@@ -145,6 +145,7 @@
         if (this.keyword!=='') {
           location.params = {keyword: this.keyword}
         }
+        // location.params = {keyword: this.keyword}
 
         if (this.$route.name==='search') {
           this.$router.replace(location)

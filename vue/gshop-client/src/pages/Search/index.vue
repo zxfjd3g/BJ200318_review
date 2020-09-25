@@ -100,6 +100,8 @@
   export default {
     name: 'Search',
 
+    props: ['keyword'],
+
     data () {
       return {
         options: { // 包含所有用于搜索请求的可选参数属性的对象

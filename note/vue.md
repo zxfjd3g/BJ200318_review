@@ -436,9 +436,26 @@ export default {
 
 #### 问题1: vuex中的mutation可以执行异步操作吗?
 
-
+- 可以 ==> 异步更新数据后界面确实会自动更新
+- 问题 ==> vuex的调用工具监视不到mutation中的异步更新, 工具记录还是更新前的数据(不对)
+- 扩展: 工具如何记录数据变化? ==> 每次mutation函数执行完后, 立即记录当前的数据   ==> 在mutation中同步更新state, 才能被记录到
 
 #### 问题2: vuex数据刷新丢失的问题
+
+- 绑定事件监听: 在卸载前保存当前数据
+
+```js
+window.addEventListener('beforeunload', () => {
+        sessionStorage.setItem('CART_LIST_KEY', 
+                               JSON.stringify(this.$store.state.shopCart.cartList))
+      })
+```
+
+- 在初始时读取保存数据作为状态的初始值
+
+```js
+cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
+```
 
 
 
@@ -446,7 +463,7 @@ export default {
 
 #### 一些基本知识
 
-- 跳转路由的2种基本方式
+- 跳转/导航路由的2种基本方式
 	- 声明式路由:  <router-link to="/xxx">xxx</router-link/>
 	- 编程式路由: this.$router.push(location)
 
@@ -454,16 +471,57 @@ export default {
 	- params
 	- query参数
 	- props
+	  -  props: true, // 只能同名映射params参数
+	  - props: {a: 1, b: 'abc'}, // 没办法读取params/query参数
+	  - props: route => ({keyword3: route.params.keyword, keyword4: route.query.keyword2, xxx: 12}), // 能力最强
 - location的2种类型值
-	- 字符串
-	- 对象形式
+	- 字符串 path
+	- 对象形式: {name, path, params, query}
 
 ####   参数相关问题
 
 - params与path配置能不能同时使用
+
+  不可以: router.push({path: '/xx', params: {name: 'tom'}})
+
+  可以: router.push({name: 'xx', params: {name: 'tom'}})
+
 - 如何配置params参数可传可不传?
+
+  path: '/search/:keyword?',    
+
+  注意: 一旦声明可以不传, 不能传入一个空串的param参数
+
 - 路由组件能不能传递props参数?
-- 编程式路由跳转到当前路由, 参数不变会报出错误?
+
+  可以, 但只是将params/query映射成props传入路由组件的
+
+- 编程式路由跳转到当前路由, 参数不变, 会报出错误?
+
+  当编程式跳转到当前路由且参数数据不变, 就会出警告错误:
+
+  ​    错误: 
+
+  ​      Avoided redundant navigation to current location ==> 重复跳转路由
+
+  ​    原因: 
+
+  ​      vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断如果要跳转的路径和参数都没有变化, 会抛出一个失败的promise
+
+  ​    解决:
+
+  ​      办法1: 在每次push时指定回调函数或catch错误
+
+  ​      办法2: 重写VueRouter原型上的push方法 (比较好)
+
+  ​        1). 如果没有指定回调函数, 需要调用原本的push()后catch()来处理错误的promise
+
+  ​        2). 如果传入了回调函数, 本身就没问题, 直接调用原本的push()就可以
+
+  ​        push(location, onComplete, onAbort)
+
+  ​        push(locatoin).then(onComplete, onAbort)
+
 - 如何让路由跳转后, 滚动条自动停留到起始位置?
 
 #### 有点难度, 但很重要的

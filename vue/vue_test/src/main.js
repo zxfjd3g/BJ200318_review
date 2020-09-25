@@ -5,6 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import myPlugin from '@/pages/Reuse/vue-myPlugin'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 
 Vue.use(ElementUI)
 Vue.use(myPlugin) 
@@ -19,4 +20,13 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
   router,
+  store, // 所有组件都可以通过$store得到store对象
 }).$mount('#app')
+
+/* 
+store对象的能力
+  state
+  getters
+  dispatch(actionName, data)
+  commit(mutationName, data)
+*/
