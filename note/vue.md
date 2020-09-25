@@ -314,9 +314,21 @@ export default {
 #### 1) 几个重要问题?
 
 - mvvm的理解, 与MVC的区别?
+
+  > 查看word
+
 - 组件的data为什么只能是函数不能是对象?
+
+  - 同一个组件的多个组件实例的data必须是不同的对象(内容初始数据可以相同)
+  - 如果是data是对象, 组件的多个实例共用一个data对象
+  - 如果是函数, 组件对象通过调用函数得到的一个新的data对象
+
 - 响应式数据与非响应式数据?
+  - 响应式: data / props / computed
+  - 非响应式:　仅仅存在于组件对象上的属性数据
 - 对象的响应式与数组的响应式有什么区别?
+  - 对象: 通过Object.defineProperty()添加setter方法来监视属性数据的改变 + 订阅-发布
+  - 数组: 重新数据一系列的更新数组元素的方法 + 订阅-发布
 
 
 
@@ -336,18 +348,21 @@ export default {
   - 通过Object.defineProperty()给vm添加与data对象中对应的属性
   - 在getter中, 读取data中对应的属性值返回  ==> 当我们通过this.xxx读值时, 读取的是data中对应的属性值
   - 在setter中, 将最新的值保存到data中对应的属性上  ==>当我们通过this.xxx = value时, value保存在data中对应的属性上
-- 数据劫持
+  - 作用: 简化对vm/组件对象内部的data对象的属性数据的操作(读/写)
+- 数据劫持/监视
   - 在observer中, 通过Object.defineProperty()给data中所有层次属性都添加上getter/setter
   - 为每个属性都创建一个dep对象, 用于后面更新 / 
   - 注意: 在解析模板时, 为每个表达式都创建了一个用于更新对应节点的watcher
   - 在getter中, 去建立dep与watcher之间的关系
-    - 一个dep中, 保存了包含n个watcher的数组
+    - dep与data中的属性一一对应
+    - watcher与模板中的表达式一一对应
+    - 一个dep中, 保存了包含n个watcher的数组,    当多个表达式用到当前dep所对应的属性
     - 一个watcher中, 保存了包含n个dep的对象
   - 在setter中, 通过dep去通知所有watcher去更新对应的节点
 - 发布-订阅模式
   - 发布者: observer
   - 订阅者: watcher
-  - 订阅器: dep
+  - 订阅器/中间人: dep
 - 更新数据后的基本流程
   - this.xxx = value
   - 由于有数据代理, data中的xxx会更新

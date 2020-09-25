@@ -59,9 +59,9 @@ function observe(value, vm) {
 
 var uid = 0;
 
-function Dep() {
+function Dep() { // 对就一个属性
     this.id = uid++;
-    this.subs = [];
+    this.subs = []; // 保存watcher的数组 ==> 当属性在多个表达式使用时有多个watcher
 }
 
 Dep.prototype = {
@@ -82,7 +82,7 @@ Dep.prototype = {
 
     notify: function() {
         // 遍历每个订阅者watcher
-        this.subs.forEach(function(sub) {
+        this.subs.forEach(function(sub) { // subcriber
             // 去更新对应的节点
             sub.update();
         });

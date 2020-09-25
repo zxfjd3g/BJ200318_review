@@ -156,7 +156,7 @@ var compileUtil = {
     exp: 表达式   name
     dir: 指令名  text/html/class/model
     */
-    bind: function(node, vm, exp, dir) {
+    bind: function(node, vm, exp, dir) { // expression directive
         // 根据指令名得到对应的更新函数
         var updaterFn = updater[dir + 'Updater'];
         // 执行更新函数第一次更新节点 ==> 初始化显示
