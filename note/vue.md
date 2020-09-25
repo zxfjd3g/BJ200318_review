@@ -309,9 +309,18 @@ export default {
 
 
 
-### Vue的响应式原理
+### Vue的响应式
 
-#### Vue数据绑定/响应式
+#### 1) 几个重要问题?
+
+- mvvm的理解, 与MVC的区别?
+- 组件的data为什么只能是函数不能是对象?
+- 响应式数据与非响应式数据?
+- 对象的响应式与数组的响应式有什么区别?
+
+
+
+#### 2) Vue数据绑定/响应式原理图
 
 ![vue响应式原理](.\images\vue响应式原理.png)
 
@@ -345,28 +354,87 @@ export default {
   - 由于有数据劫持, xxx对应的setter就会调用
   - 在setter中, 通过dep去通知所有对应的watcher去更新对应的节点
 
-#### Vue双向数据绑定
+#### 3) Vue双向数据绑定
 
 - 通过v-model来实现双向数据绑定
 - v-model的本质
   - 将动态的data数据通过value属性传给input显示  ==> data到view的绑定
   - 给input标签绑定input监听, 一旦输入改变读取最新的值保存到data对应的属性上 ==> view到data的绑定
 
+
+
+### 可复用性
+
+#### 1) mixin(混入)
+
+#### 2) 自定义指令
+
+#### 3) 自定义过滤器
+
+#### 4) 自定义插件
+
+
+
+### Vue状态管理: Vuex
+
+#### vuex的5大属性
+
+- state
+- mutations
+- actions
+- getters
+- modules
+
+#### vuex的数据流结构图
+
+![vuex](.\images\vuex.png)
+
+
+
+#### vuex多模块编程
+
+- vuex的多模块编程的必要性
+  - vuex单模块问题: 
+    - 需要的管理状态数据比较多, 那对应的mutations/actions模块就会变得比较大
+    - 如果添加新的数据管理, 需要修改现在文件(不断向其添加内容) 
+  - vuex多模块编程: 对各个功能模块的数据分别进行管理, 这样更加具有扩展性
+
+- 什么时候需要用vuex多模块编程? 需要vuex管理的数据比较多时使用
+- 多模块编程的总state结构:
+
+```js
+{
+	home: {
+        categoryList: [],
+        xxx: {}
+    },
+    user: {
+        userInfo: {}
+    }
+}
+```
+
+#### 问题1: vuex中的mutation可以执行异步操作吗?
+
+
+
+#### 问题2: vuex数据刷新丢失的问题
+
+
+
 ### Vue路由: vue-router
 
 #### 一些基本知识
 
 - 跳转路由的2种基本方式
-	- 声明式路由
-	- 编程式路由
+	- 声明式路由:  <router-link to="/xxx">xxx</router-link/>
+	- 编程式路由: this.$router.push(location)
 
-- 跳转路由携带参数的类型
+- 跳转路由携带参数(数据)的方式
 	- params
 	- query参数
-- 将params参数或query参数映射成props
-	- ~~通过state携带数据 (必须history路由)~~      vue-router没有设计, react的路由中设计了
-	
-- location的2种类型
+	- props
+- location的2种类型值
 	- 字符串
 	- 对象形式
 
@@ -393,6 +461,8 @@ export default {
 - 路由守卫与权限校验
   - router.beforeEach()注册全局前置守卫
   - 统一对用户权限进行一系列的校验处理
+- 重复跳转到当前路由且参数不变, 会抛出错误警告?
+  - 
 - history与hash路由的区别和原理
   - 区别:
     - history:  路由路径不#, 刷新会携带路由路径, 默认会出404问题, 需要配置返回首页
@@ -405,49 +475,4 @@ export default {
 
 - 全局前置守卫
 - 路由/组件前置守卫
-
-### Vue状态管理: Vuex
-
-#### vuex的5大属性
-
-- state
-- mutations
-- actions
-- getters
-- modules
-
-#### vuex的数据流结构图
-
-![vuex](.\images\vuex.png)
-
-
-
-#### vuex多模块编程
-
-- vuex的多模块编程的必要性
-  - vuex单模块问题: 
-    - 需要的管理状态数据比较多, 那对应的mutations/actions模块就会变得比较大
-    - 如果添加新的数据管理, 需要修改现在文件(不断向其添加内容) 
-  - vuex多模块编程: 对各个功能模块的数据分别进行管理, 这样更加具有扩展性
-
--  什么时候需要用vuex多模块编程? 需要vuex管理的数据比较多时使用
-- 多模块编程的总state结构:
-
-```js
-{
-	home: {
-        categoryList: [],
-        xxx: {}
-    },
-    user: {
-        userInfo: {}
-    }
-}
-```
-
-#### 问题1: vuex中的mutation可以执行异步操作吗?
-
-
-
-#### 问题2: vuex数据刷新丢失的问题
 

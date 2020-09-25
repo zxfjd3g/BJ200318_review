@@ -6,7 +6,6 @@ import Comp from '@/pages/Comp'
 import DynamicCacheAsync from '@/pages/Comp/DynamicCacheAsync'
 import FunctionalComp from '@/pages/Comp/FunctionalComp'
 import RecurseComp from '@/pages/Comp/RecurseComp'
-import Reactive from '@/pages/Reactive'
 
 export default [
   
@@ -81,6 +80,29 @@ export default [
 
   {
     path: '/reactive',
-    component: Reactive,
+    component: () => import('@/pages/Reactive'),
+  },
+
+  {
+    path: '/reuse',
+    component: () => import('@/pages/Reuse'),
+  },
+  {
+    path: '/router',
+    component: () => import('@/pages/Router'),
+  },
+  {
+    path: '/vuex',
+    component: () => import('@/pages/Vuex'),
+    children: [
+      {
+        path: 'shopcart',
+        component: () => import('@/pages/Vuex/ShopCart'),
+      },
+      {
+        path: 'personal',
+        component: () => import('@/pages/Vuex/Personal'),
+      }
+    ]
   },
 ]
