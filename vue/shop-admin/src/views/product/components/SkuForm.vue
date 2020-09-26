@@ -22,7 +22,7 @@
 
     <el-form-item label="平台属性">
       <el-form inline label-width="100px">
-        <el-form-item :label="attr.attrName" style="margin: 5px 0" v-for="attr in attrList">
+        <el-form-item :label="attr.attrName" style="margin: 5px 0" v-for="attr in attrList" :key="attr.id">
           <el-select placeholder="请输入" v-model="attr.attrIdValueId">
             <el-option :label="value.valueName" :value="attr.id + ':' + value.id" v-for="value in attr.attrValueList" :key="value.id"></el-option>
           </el-select>

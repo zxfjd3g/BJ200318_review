@@ -289,12 +289,21 @@ export default {
 
 ```
 父子
-	props
-	vue自定义事件
-	v-model
-	.sync
-	$ref, $children与$parent
+	props: 
+		父向子
+		子向父
+	vue自定义事件: 
+		子向父
+	v-model: 
+		父子之间
+	.sync: 
+		在父向子的基础上添加子向父
+	$ref, $children与$parent: 
+		$ref/$children: 父向子
+		$parent: 子向父
 	插槽 ==> 作用域插槽
+		默认插槽/具名插槽: 父组件向子组件传递标签内容
+		作用域插件: 子向父传递数据后, 父组件根据接收到的数据来决定向子组件传递不同的标签内容
 祖孙
 	$attrs与$listeners
 	provide与inject
@@ -389,15 +398,50 @@ export default {
 
 #### 2) 自定义指令
 
+```js
+Vue.directive('upper-text', (el, binding) => {
+    el.innerText = binding.value.toUpperCase()
+})
+```
+
 #### 3) 自定义过滤器
+
+```js
+// 注册全局过滤器
+Vue.filter('date-format', (value) => {
+  return moment(value).format('YYYY-MM-DD HH:mm:ss')
+})
+```
 
 #### 4) 自定义插件
 
+```js
+// 对象插件
+const myPlugin = {
+    install (Vue) {
+        // 通过Vue来扩展新的功能语法, 如注册全局组件/指令/过滤器/...
+    }
+}
+// 函数插件
+const myPlugin = (Vue) => {
+    // 通过Vue来扩展新的功能语法, 如注册全局组件/指令/过滤器/...
+}
 
+export default myPlugin
+
+// 在入口JS中引入, 并声明使用来安装插件
+import myPlugin from './vue-myPlugin'
+Vue.use(myPlugin)
+```
+
+#### 问题: Vue.use()内部做了什么?
+
+- 对象插件: 调用插件对象install方法(传入Vue)来安装插件(执行定义新语法的代码)
+- 函数插件: 直接将其作为install来调用(传入Vue)来安装插件(执行定义新语法的代码)
 
 ### Vue状态管理: Vuex
 
-#### vuex的5大属性
+#### 1) vuex的5大属性
 
 - state
 - mutations
@@ -405,13 +449,13 @@ export default {
 - getters
 - modules
 
-#### vuex的数据流结构图
+#### 2) vuex的数据流结构图
 
 ![vuex](.\images\vuex.png)
 
 
 
-#### vuex多模块编程
+#### 3) vuex多模块编程
 
 - vuex的多模块编程的必要性
   - vuex单模块问题: 
@@ -434,21 +478,21 @@ export default {
 }
 ```
 
-#### 问题1: vuex中的mutation可以执行异步操作吗?
+#### 4) 问题1: vuex中的mutation可以执行异步操作吗?
 
 - 可以 ==> 异步更新数据后界面确实会自动更新
 - 问题 ==> vuex的调用工具监视不到mutation中的异步更新, 工具记录还是更新前的数据(不对)
 - 扩展: 工具如何记录数据变化? ==> 每次mutation函数执行完后, 立即记录当前的数据   ==> 在mutation中同步更新state, 才能被记录到
 
-#### 问题2: vuex数据刷新丢失的问题
+#### 5) 问题2: vuex数据刷新丢失的问题
 
 - 绑定事件监听: 在卸载前保存当前数据
 
 ```js
 window.addEventListener('beforeunload', () => {
-        sessionStorage.setItem('CART_LIST_KEY', 
-                               JSON.stringify(this.$store.state.shopCart.cartList))
-      })
+	sessionStorage.setItem('CART_LIST_KEY', 
+		JSON.stringify(this.$store.state.shopCart.cartList))
+})
 ```
 
 - 在初始时读取保存数据作为状态的初始值
@@ -461,7 +505,7 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 
 ### Vue路由: vue-router
 
-#### 一些基本知识
+#### 1) 一些基本知识
 
 - 跳转/导航路由的2种基本方式
 	- 声明式路由:  <router-link to="/xxx">xxx</router-link/>
@@ -472,19 +516,19 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 	- query参数
 	- props
 	  -  props: true, // 只能同名映射params参数
-	  - props: {a: 1, b: 'abc'}, // 没办法读取params/query参数
-	  - props: route => ({keyword3: route.params.keyword, keyword4: route.query.keyword2, xxx: 12}), // 能力最强
+	  - props: {a: 1, b: 'abc'}, // 只能映射非params/query参数
+	  - props: route => ({keyword3: route.params.keyword, keyword4: route.query.keyword2, xxx: 12}), //可以指定任何数据都可以
 - location的2种类型值
 	- 字符串 path
 	- 对象形式: {name, path, params, query}
 
-####   参数相关问题
+####   2) 参数相关问题
 
 - params与path配置能不能同时使用
 
   不可以: router.push({path: '/xx', params: {name: 'tom'}})
 
-  可以: router.push({name: 'xx', params: {name: 'tom'}})
+  params只能与name配合: router.push({name: 'xx', params: {name: 'tom'}})   
 
 - 如何配置params参数可传可不传?
 
@@ -496,49 +540,72 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 
   可以, 但只是将params/query映射成props传入路由组件的
 
-- 编程式路由跳转到当前路由, 参数不变, 会报出错误?
+- 编程式路由跳转到当前路由, 参数不变, 会报出错误?  ==> 在做项目时有没有遇到比较难/奇怪的问题?
 
-  当编程式跳转到当前路由且参数数据不变, 就会出警告错误:
+  - 说明情况:
 
-  ​    错误: 
+    - 上一个项目这种操作没有这个问题
+    - 后面的一个项目(2019.8之后)开始有这个问题, 而且是声明式跳转没有, 只有编程式跳转有
 
-  ​      Avoided redundant navigation to current location ==> 重复跳转路由
+  - 当编程式跳转到当前路由且参数数据不变, 就会出警告错误:
 
-  ​    原因: 
+    错误: Avoided redundant navigation to current location ==> 重复跳转当前路由
 
-  ​      vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断如果要跳转的路径和参数都没有变化, 会抛出一个失败的promise
+  - 原因: 
 
-  ​    解决:
+    vue-router在3.1.0版本(2019.8)引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断如果要跳转的路径和参数都没有变化, 会抛出一个失败的promise
 
-  ​      办法1: 在每次push时指定回调函数或catch错误
+    说明文档: https://github.com/vuejs/vue-router/releases?after=v3.3.1
 
-  ​      办法2: 重写VueRouter原型上的push方法 (比较好)
+  - 解决:
 
-  ​        1). 如果没有指定回调函数, 需要调用原本的push()后catch()来处理错误的promise
+    - 办法1: 在每次push时指定回调函数或catch错误
+    - 办法2: 重写VueRouter原型上的push方法 (比较好)
+      - 1). 如果没有指定回调函数, 需要调用原本的push()后catch()来处理错误的promise
+      - 2). 如果传入了回调函数, 本身就没问题, 直接调用原本的push()就可以
 
-  ​        2). 如果传入了回调函数, 本身就没问题, 直接调用原本的push()就可以
+    ```js
+    VueRouter.prototype.push = function (location, onComplete, onAbort) {
+      console.log('push()', onComplete, onAbort)
+      // 判断如果没有指定回调函数, 通过call调用源函数并使用catch来处理错误
+      if (onComplete===undefined && onAbort===undefined) {
+        return originPush.call(this, location).catch(() => {})
+      } else { // 如果有指定任意回调函数, 通过call调用源push函数处理
+        originPush.call(this, location, onComplete, onAbort)
+      }
+    }
+    ```
 
-  ​        push(location, onComplete, onAbort)
+  - 说明:
 
-  ​        push(locatoin).then(onComplete, onAbort)
+      声明式路由跳转之所有没有问题, 是因为默认传入了成功的空回调函数
 
-- 如何让路由跳转后, 滚动条自动停留到起始位置?
-
-#### 有点难度, 但很重要的
+#### 3) 有点难度, 但很重要的
 
 - 路由懒加载: 
   - () => import('./Home.vue')
   - 组件单独打包, 开始不加载其打包文件, 第一次请求时才会加载 ==> 加载更快, 提高用户体验
+  
 - 缓存路由组件
-  - <keep-alive><router-view/></keep-alive>
-  - 路由离开时不销毁, 路由回来时不用重新创建  ==> 利用缓存, 切换路由更快
-  - 再利用上prefetch实现预获取, 用户体验更佳
+
+  ```vue
+  <keep-alive>
+      <router-view/>
+  </keep-alive>
+  ```
+
+​			路由离开时不销毁, 路由回来时不用重新创建  ==> 利用缓存, 切换路由更快
+
+​			再利用上prefetch实现预获取, 用户体验更佳
+
 - 动态添加路由
   - router.addRoutes(routes)
   - 在异步确定用户的权限路由后, 需要动态添加到路由器
+  
 - 路由守卫与权限校验
   - router.beforeEach()注册全局前置守卫
   - 统一对用户权限进行一系列的校验处理
+  
 - history与hash路由的区别和原理
   - 区别:
     - history:  路由路径不#, 刷新会携带路由路径, 默认会出404问题, 需要配置返回首页
@@ -546,9 +613,105 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
   - 原理:
     - history: 内部利用的是history对象的pushState()和replaceState() (H5新语法)
     - hash: 内部利用的是location对象的hash语法
+  
+- 如何让路由跳转后, 滚动条自动停留到起始位置?
 
-####   路由导航守卫的理解和使用
+  ```js
+  new VueRouter({ // 配置对象
+    // ...
+    scrollBehavior (to, from, savedPosition) {
+      // 指定路由跳转后滚条的坐标
+      return { x: 0, y: 0 }
+    }
+  })
+  ```
 
-- 全局前置守卫
-- 路由/组件前置守卫
+- 如何实现登陆后, 自动跳转到前面要访问的路由界面
+
+  - 在全局前置守卫中, 强制跳转到登陆页面时携带目标路径的redirect参数
+
+    ```js
+    if (token) {
+      next()
+    } else {
+      // 如果还没有登陆, 强制跳转到login
+      next('/login?redirect='+to.path)  // 携带目标路径的参数数据
+    }
+    ```
+
+    
+
+  - 在登陆成功后, 跳转到redirect参数的路由路径上
+
+    ```js
+    await this.$store.dispatch('login', {mobile, password})
+    // 成功了, 跳转到redirect路由 或 首页
+    const redirect = this.$route.query.redirect
+    this.$router.replace(redirect || '/')
+    ```
+
+    
+
+####   4) 路由导航守卫的理解和使用
+
+- 导航守卫是什么?
+
+  - 导航守卫是vue-router提供的下面2个方面的功能
+    - 监视路由跳转  -->回调函数
+    - 控制路由跳转
+  - 应用
+    - 在跳转到界面前, 进行用户权限检查限制(如是否已登陆/是否有访问路由权限)
+    - 在跳转到登陆界面前, 判断用户没有登陆才显示
+
+- 导航守卫分类
+
+  - 全局守卫: 针对任意路由跳转
+
+    - 全局前置守卫
+
+      ```js
+      router.beforeEach((to, from, next) => {
+        // ...
+      })
+      ```
+
+    - 全局后置守卫
+
+      router.afterEach((to, from) => {})
+
+  - 路由独享的守卫
+
+    - 前置守卫
+
+      ```js
+      {
+      	path: '/foo',
+      	component: Foo,
+      	beforeEnter: (to, from, next) => {}
+      }
+      ```
+
+  - 组件守卫: 只针对当前组件的路由跳转
+
+    - 进入
+
+      ```js
+      beforeRouteEnter (to, from, next) {
+          // 在渲染该组件的对应路由被 confirm 前调用
+          // 不！能！获取组件实例 `this`
+          // 因为当守卫执行前，组件实例还没被创建
+          
+          next(vm => {
+          	// 通过 `vm` 访问组件实例
+        	})
+      },
+      ```
+
+    - 更新: 
+
+      beforeRouteUpdate (to, from, next) {}
+
+    - 离开
+
+      beforeRouteLeave (to, from, next) {}
 

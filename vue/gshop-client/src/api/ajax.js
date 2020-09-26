@@ -13,6 +13,7 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import store from '@/store'
+import router from '@/router'
 
 NProgress.configure({ showSpinner: false }) // 隐藏右侧的旋转进度条
 
@@ -54,8 +55,31 @@ instance.interceptors.response.use(
   error => { // 失败的回调
     // 结束进度条: 响应拦截器回调
     NProgress.done()
+
     // 统一处理请求错误, 具体请求也可以选择处理或不处理
-    alert('请求出错: ' + error.message||'未知错误')
+    // alert('请求出错: ' + error.message||'未知错误')
+
+    // 取出响应对象
+    const { response } = error
+    // 如果是请求处理出错
+    if (response && response.status) {
+      // 401说明token非法
+      if (response.status === 401) {
+        // 如果当前没在登陆页
+        if (router.currentRoute.path!=='/login') {
+          // 分发action去清除用户token信息
+          await store.dispatch('logout')
+          // 跳转到登陆页面
+          router.replace('/login')
+          // 提示
+          message.error('登陆已过期, 请重新登陆')
+        }
+      } else {
+        message.error('请求出错: ' + error.message||'未知错误')
+      }
+    } else if (!response) { // 网络连接不上服务器
+      message.error('您的网络发生异常，无法连接服务器')
+    }
 
     // throw error
     return Promise.reject(error) // 将错误向下传递
