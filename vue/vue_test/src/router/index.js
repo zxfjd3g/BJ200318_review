@@ -6,7 +6,8 @@ Vue.use(VueRouter)
 
 // 1. 创建路由器
 const router = new VueRouter({
-	mode: 'history',
+	// mode: 'history',
+	mode: 'hash',
 	routes,
 })
 

@@ -19,6 +19,7 @@
     console.log(location.pathname, location.hash)
     window.onhashchange = () => {
       console.log('hashchange', location.hash)
+      console.log('根据当前hash路径来查找对应的路由组件来显示')
     }
 
     // history
