@@ -226,9 +226,9 @@ export default {
     */
     showUpdate (attr) {
       // 保存当前属性对象
-      // this.attr = attr  // 问题: 属性名称修改不能取消
+      this.attr = attr  // 问题: 属性名称修改不能取消
      
-      // this.attr = {...attr} // 使用浅拷贝解决上面的问题 
+      this.attr = {...attr} // 使用浅拷贝解决上面的问题 
         //问题: 修改属性值不能取消
         // 原因: 列表与修改界面共享同个属性值数组(原因: 使用的是浅拷贝)
         // 解决: 使用深拷贝
@@ -237,6 +237,10 @@ export default {
       // 方法2: 使用lodash库
       const cloneAttr = cloneDeep(attr)
       this.attr = cloneAttr
+
+      // const obj1 = {m: 1, n: [1, 2, 3]}
+      // const obj2 = {...obj1}  // {m: 1, n: 还是上面的数组}
+      // const obj3 = {m: 1, n: [1, 2, 3]}
 
       // 显示修改界面
       this.isShowList = false
