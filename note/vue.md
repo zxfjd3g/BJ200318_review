@@ -333,8 +333,10 @@ export default {
   - 如果是函数, 组件对象通过调用函数得到的一个新的data对象
 
 - 响应式数据与非响应式数据?
-  - 响应式: data / props / computed
+  - 响应式: data / props / computed/ vuex的state与getters
   - 非响应式:　仅仅存在于组件对象上的属性数据
+    - 给组件对象添加一个新属性: this.xxx = value 
+    - 直接给一个响应式对象添加一个新属性: this.product.xxx = 'abc'
 - 对象的响应式与数组的响应式有什么区别?
   - 对象: 通过Object.defineProperty()添加setter方法来监视属性数据的改变 + 订阅-发布
   - 数组: 重新数据一系列的更新数组元素的方法 + 订阅-发布
@@ -521,6 +523,8 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 - location的2种类型值
 	- 字符串 path
 	- 对象形式: {name, path, params, query}
+	- push(location)
+	- <router-link :to="{}">
 
 ####   2) 参数相关问题
 
@@ -565,19 +569,20 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
       - 2). 如果传入了回调函数, 本身就没问题, 直接调用原本的push()就可以
 
     ```js
+    const originPush = VueRouter.prototype.push
     VueRouter.prototype.push = function (location, onComplete, onAbort) {
       console.log('push()', onComplete, onAbort)
       // 判断如果没有指定回调函数, 通过call调用源函数并使用catch来处理错误
       if (onComplete===undefined && onAbort===undefined) {
         return originPush.call(this, location).catch(() => {})
       } else { // 如果有指定任意回调函数, 通过call调用源push函数处理
-        originPush.call(this, location, onComplete, onAbort)
+        return originPush.call(this, location, onComplete, onAbort)
       }
     }
-    ```
-
-  - 说明:
-
+  ```
+  
+- 说明:
+  
       声明式路由跳转之所有没有问题, 是因为默认传入了成功的空回调函数
 
 #### 3) 有点难度, 但很重要的
@@ -609,11 +614,35 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 - history与hash路由的区别和原理
   - 区别:
     - history:  路由路径不#, 刷新会携带路由路径, 默认会出404问题, 需要配置返回首页
+
+      - 404: 
+
+        - history有: 刷新请求时会携带前台路由路径, 没有对应的资源返回
+        - hash没有: 刷新请求时不会携带#路由路径
+
+      - 解决: 
+
+        - 开发环境: 如果是脚手架项目本身就配置好 
+
+          ==> webpack ==> devServer: {`historyApiFallback` : true}
+
+          当使用 [HTML5 History API](https://developer.mozilla.org/en-US/docs/Web/API/History) 时, 所有的 `404` 请求都会响应 `index.html` 的内容
+
+      - 生产环境打包运行:
+
+        - 配置nginx
+
+          ```nginx
+          location / {
+            try_files $uri $uri/ /index.html; # 所有404的请求都返回index页面
+          }
+          ```
+
     - hash: 路由路径带#, 刷新不会携带路由路径, 请求的总是根路径, 返回首页, 没有404问题
   - 原理:
     - history: 内部利用的是history对象的pushState()和replaceState() (H5新语法)
     - hash: 内部利用的是location对象的hash语法
-  
+
 - 如何让路由跳转后, 滚动条自动停留到起始位置?
 
   ```js
@@ -658,7 +687,7 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 
   - 导航守卫是vue-router提供的下面2个方面的功能
     - 监视路由跳转  -->回调函数
-    - 控制路由跳转
+    - 控制路由跳转  -->  放行/不放行/强制跳转到指定位置    next()
   - 应用
     - 在跳转到界面前, 进行用户权限检查限制(如是否已登陆/是否有访问路由权限)
     - 在跳转到登陆界面前, 判断用户没有登陆才显示
@@ -679,7 +708,7 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
 
       router.afterEach((to, from) => {})
 
-  - 路由独享的守卫
+  - 路由守卫
 
     - 前置守卫
 
@@ -688,30 +717,36 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
       	path: '/foo',
       	component: Foo,
       	beforeEnter: (to, from, next) => {}
-      }
+      },
+          
+    {
+      	path: '/xxx',
+    	component: Foo,
+      	beforeEnter: (to, from, next) => {}
+    }
       ```
-
+  
   - 组件守卫: 只针对当前组件的路由跳转
-
+  
     - 进入
-
+  
       ```js
       beforeRouteEnter (to, from, next) {
           // 在渲染该组件的对应路由被 confirm 前调用
           // 不！能！获取组件实例 `this`
           // 因为当守卫执行前，组件实例还没被创建
-          
+        
           next(vm => {
-          	// 通过 `vm` 访问组件实例
+        	// 通过 `vm` 访问组件实例
         	})
-      },
+    },
       ```
 
     - 更新: 
-
+  
       beforeRouteUpdate (to, from, next) {}
-
+  
     - 离开
-
+  
       beforeRouteLeave (to, from, next) {}
 
