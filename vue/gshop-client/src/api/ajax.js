@@ -52,7 +52,7 @@ instance.interceptors.response.use(
     return response.data
   },
 
-  error => { // 失败的回调
+  async error => { // 失败的回调
     // 结束进度条: 响应拦截器回调
     NProgress.done()
 
