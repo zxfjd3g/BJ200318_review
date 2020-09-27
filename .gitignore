@@ -2,3 +2,6 @@ node_modules
 .vscode
 .idea
 dist
+*~$*.doc
+*~$*.docx
+note/面试精讲2.0.docx
