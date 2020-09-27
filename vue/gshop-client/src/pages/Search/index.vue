@@ -86,7 +86,7 @@
             :currentPage="options.pageNo" 
             :total="productList.total" 
             :pageSize="options.pageSize"
-            :showPageNo="3"
+            :showPageNo="5"
             @currentChange="handleCurrentChange"/>
         </div>
       </div>
@@ -111,7 +111,7 @@
           categoryName: '',  // 分类名称
           keyword: '',  // 搜索关键字
           pageNo: 1, // 当前页码
-          pageSize: 10, // 每页数量
+          pageSize: 2, // 每页数量
           trademark: '', // 品牌条件   品牌ID:品牌名称,  4:小米
           props: [], // 多个属性条件    属性id:属性值:属性名 "2:6.65-6.74英寸:屏幕尺寸"
           order: '1:desc', // 排序条件  1: 综合,2: 价格 asc: 升序,desc: 降序   1:desc
