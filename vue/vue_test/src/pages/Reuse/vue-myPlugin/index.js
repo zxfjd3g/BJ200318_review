@@ -1,5 +1,4 @@
-// import moment from 'moment'
-import dayjs from 'dayjs'
+import moment from 'moment'
 import HintButton from './HintButton.vue'
 
 /* 
@@ -22,7 +21,7 @@ function myPlugin(Vue) {
 
   // 注册全局过滤器
   Vue.filter('date-format', (value) => {
-    return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+    return moment(value).format('YYYY-MM-DD HH:mm:ss')
   })
 
   Vue.prototype.$xxx = function () {
