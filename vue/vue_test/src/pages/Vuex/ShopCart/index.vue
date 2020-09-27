@@ -26,6 +26,17 @@
        cartList: state => state.shopCart.cartList
      }),
      ...mapGetters(['totalPrice'])
-   }
+   },
+
+    watch: {
+
+      cartList: {
+        deep: true, // 尝试监视
+        immediate: true, // 是否初始化立即执行一次
+        handler (value) {
+          console.log('state数据cartList发生了改变')
+        }
+      }
+    },
   }
 </script>

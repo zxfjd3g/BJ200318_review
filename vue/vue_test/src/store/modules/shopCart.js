@@ -10,7 +10,7 @@ const mutations = {
   asyncUpdate (state) {
     setTimeout(() => {
       state.cartList.push({
-        id: 3,
+        id: Date.now(),
         name: '商品1',
         price: 1212,
         count: 2

@@ -21,10 +21,9 @@
       cartList () {
         return this.$store.state.shopCart.cartList
       },
-
       totalPrice () {
         return this.$store.getters.totalPrice
       }
-    }
+    },
   }
 </script>
