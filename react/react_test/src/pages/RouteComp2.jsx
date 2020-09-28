@@ -5,10 +5,11 @@ import {
 } from 'react-router-dom'
 import ChildRouteComp from './ChildRouteComp'
 
-export default function RouteComp2() {
+export default function RouteComp2(props) {
   return (
     <div>
       <h3>RouteComp222</h3>
+      <p>props count3 {props.count3}</p>
 
       <Link to="/rc2/child">子路由</Link>
 
