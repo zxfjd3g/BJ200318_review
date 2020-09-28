@@ -16,3 +16,5 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
+// document.cookie = 'name=tom;age=12'
