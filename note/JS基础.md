@@ -58,7 +58,11 @@ const f1 = new Foo()
 const f2 = new Foo()
 
 const o1 = new Object()
-const
+const o2 = {}
+
+Foo instanceof Object
+Foo instanceOf Function
+Object instanceof Object
 ```
 
 ![原型与原型链结构图](D:/work/200318/面试精讲/200318-SH/code/review/images/原型与原型链结构图.png)
@@ -87,7 +91,7 @@ const
 
 - 变量提升: 在变量定义语句之前, 就可以访问到这个变量(undefined)
 - 函数提升: 在函数定义语句之前, 就执行该函数
-- 原因: 简单来说就是在执行函数前会进行预解析/处理
+- 原因: 简单来说就是在执行全局代码和函数前会进行预解析/处理
 
 
 
@@ -119,6 +123,14 @@ const
   var f = fn1();
   f();
   f();
+  
+  
+  function showDedelay (time, msg) {
+      setTimeout(() => {
+          alert(msg)
+      }, time)
+  }
+  showDelay(1000)
   ```
 
   
@@ -134,22 +146,23 @@ const
   - **能控制函数的this是需要的特定对象**
 
 - 常规情况下, 函数中的this取决于执行函数的方式
-  - fn(): 直接调用  ==> **this是?**
-  - new fn(): new调用 ==> **this是?**
-  - obj.fn(): 通过对象调用 ==> **this是?**
-  - fn.call/apply(obj): 通过函数对象的call/apply来调用 ==> **this是?**
+  - fn(): 直接调用  ==> **this是?**  window
+  - new fn(): new调用 ==> **this是?**  新建的对象
+  - obj.fn(): 通过对象调用 ==> **this是?**  obj
+  - fn.call/apply(obj): 通过函数对象的call/apply来调用 ==> **this是?**  obj
 
 - 特殊情况:
-  - bind(obj)返回的函数  ==> **this是?**
-  - 箭头函数 ==> **this是?**
+  - bind(obj)返回的函数  ==> **this是?**  obj
+  - 箭头函数 ==> **this是?**  外部作用域的this
   - 回调函数
-    - 定时器/ajax/promise/数组遍历相关方法回调  ==> **this是?**
-    - vue控制的回调函数  ==> **this是?**
-    - React控制的生命周期回调, 事件监听回调  ==>  **this是?**
+    - 定时器/ajax/promise/数组遍历相关方法回调  ==> **this是?**  window
+    - vue控制的回调函数  ==> **this是?**  组件的实例
+    - React控制的生命周期回调, 事件监听回调  ==>  **this是?**  组件对象 / undefined
 
 - 如何控制函数的this?  
   - 利用函数的bind()
   - 利用箭头函数
+  - 也可以用外部保存了this的变量
 
 ### 异步相关
 
