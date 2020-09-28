@@ -74,6 +74,36 @@
       注意: 如果不存在添加/删除/排序操作, 用index没有问题
    3. 解决:
       使用item数据的标识数据作为key, 比如id属性值
+
+      [
+        {id: 1, name: 'Tom', age: 13},
+        {id: 2, name: 'Jack', age: 12}
+      ]
+    index作为key
+      vLi0      tom       ==> li(tom)
+      vLi1      jack      ==> li(jack)
+
+      [
+        {id: 3, name: 'bob', age: 15}
+        {id: 1, name: 'Tom', age: 13},
+        {id: 2, name: 'Jack', age: 12}
+      ]
+      vLi0    bob    ==> 复用 li(tom) ==> 更新dom的数据    ===> 应该要新创建的, 但复用一个错误的真实DOM
+      vLi1    tom    ==> 复用 li(jack) ==> 更新dom的数据   ==> 应该要复用原本的, 但复用一个错误的真实DOM
+      vLi2    jack   ==> 新建 li(jack)                    ==> 应该要复用原本的
+    id作为key
+      vLi1      tom       ==> li(tom)
+      vLi2      jack      ==> li(jack)
+
+      vLi3    bob    ==> 复用 li(tom) ==> 新创建一个li显示
+      vLi1    tom    ==> 复用 li(jack) ==> 直接复用li
+      vLi2    jack   ==> 新建 li(jack)  ==> 直接复用li
+
+      下标作为key的问题?
+          至少效率的问题?  复用了其它数据对应的真实DOM(key变化了)
+          可能会有效果的问题?  如果每行都一个输入框且输入的数据(key变化了, 复用了错误的真实DOM)
+      好的处理: 要保证数据key的稳定性 ==> 同一个数据的key后面不要再发生变化, 即使内部数据发生了变化
+          下标是不稳定的, 而id比较稳定
    */
 </script>
 </body>
