@@ -1,4 +1,4 @@
-#### 原型相关
+### 原型相关
 
 #### class的组成
 
@@ -22,10 +22,10 @@
 
 #### 原型
 
-- 每个class都有一个显示原型: `prototype`
+- 每个class/函数都有一个显示原型: `prototype`
 - 每个实例都有一个隐式原型: `__proto__`
 - 实例的`__proto`与对应class的`prototype`都指向原型对象
-- 原型对象上有一个`constructor`属性指向对应的class
+- 原型对象上有一个`constructor`属性指向对应的class/构造函数
 
 ![显示原型与隐式原型](D:/work/200318/面试精讲/200318-SH/code/review/images/显示原型与隐式原型.png)
 
