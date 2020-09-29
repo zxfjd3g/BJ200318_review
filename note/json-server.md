@@ -1,8 +1,6 @@
 ## json-server是什么?
 用来快速搭建Restful API的工具包
 
-
-
 ## 使用json-server
 
 - 在线文档: 
