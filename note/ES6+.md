@@ -74,7 +74,7 @@
   - Array.from():  将类数组对象和可遍历对象转为真数组
     - Array.from(new Set(arr))
     - [...new Set(arr)]
-  - Array.of(): 将一组值，转换为数组
+  - Array.of(1, 2, 3): 将一组值，转换为数组
 - 实例方法
   - find() / findIndex(): 查找匹配的元素或下标
   - arr.flat(): 将多维数组转为一维数组(也称为: 数组扁平化)
@@ -95,7 +95,7 @@
 ### <u>类语法</u>
 
 - class
-- exntends
+- extends
 - constructor
 - super() / super.xxx()
 - static

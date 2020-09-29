@@ -201,12 +201,18 @@ Promise相对纯回调形式, 指定回调函数的时机更灵活(可以在发�
 
 ![event loop(只有宏任务)](.\images\event loop(只有宏任务).png)
 
+事件循环机制的2个重要部分
+
+​		在分线程执行的管理模块: 定时器/ajax/dom事件
+
+​		保存待执行的回调函数的事件队列
+
 
 
 #### 宏任务与微任务
 
 - 宏任务: setTimeout, setInterval, Ajax, DOM事件监听
-- 微任务: Promise, async/await, mutationobserver
+- 微任务: Promise, async/await, mutationobserver(H5)
 
 #### 宏队列与微队列
 
@@ -234,7 +240,7 @@ Promise相对纯回调形式, 指定回调函数的时机更灵活(可以在发�
 
 #### Promise的理解
 
-- ES6推出的新的更优的异步编程解决方案(相对于纯回调的方式)
+- ES6推出的新的更好的异步编程解决方案(相对于纯回调的方式)
   - 可以异步操作启动后或完成后, 再指定回调函数得到异步结果数据
   - 解决嵌套回调的回调地狱问题  ---promise链式调用
 - promise对象有3种状态
@@ -255,9 +261,16 @@ Promise相对纯回调形式, 指定回调函数的时机更灵活(可以在发�
   - 返回成功的promise
   - 返回其它任何值
 
+#### Promise.all([promise1, promise2, promise3])
+
+- 批量/一次性发送多个异步请求
+- 当都成功时, 返回的promise才成功
+- 一旦有一个失败的, 返回的promise就失败了
+
 #### async/await与promise的关系
 
 - async/await是消灭异步回调的终极武器
+- 作用: 简化promise对象的使用, 不用再使用then/catch来指定回调函数
 - 但和Promise并不互斥
 - 反而, 两者相辅相成
 - 执行async函数, 返回promise对象
