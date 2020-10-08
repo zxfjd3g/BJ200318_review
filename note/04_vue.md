@@ -579,6 +579,9 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
         return originPush.call(this, location, onComplete, onAbort)
       }
     }
+    ```
+  ```
+  
   ```
   
 - 说明:
@@ -719,11 +722,16 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
       	beforeEnter: (to, from, next) => {}
       },
           
+      ```
+  
     {
       	path: '/xxx',
     	component: Foo,
       	beforeEnter: (to, from, next) => {}
     }
+  
+      ```
+    
       ```
   
   - 组件守卫: 只针对当前组件的路由跳转
@@ -736,12 +744,12 @@ cartList: JSON.parse(sessionStorage.getItem('CART_LIST_KEY')) || [],
           // 不！能！获取组件实例 `this`
           // 因为当守卫执行前，组件实例还没被创建
         
-          next(vm => {
+        next(vm => {
         	// 通过 `vm` 访问组件实例
         	})
     },
       ```
-
+  
     - 更新: 
   
       beforeRouteUpdate (to, from, next) {}
