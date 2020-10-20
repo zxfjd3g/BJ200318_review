@@ -35,8 +35,8 @@ const actions = {
   /* 
   登陆的异步action
   */
-  async login ({commit}, {mobile, password}) {
-    const result = await reqLogin(mobile, password)
+  async login ({commit}, {phone, password}) {
+    const result = await reqLogin(phone, password)
     if (result.code===200) {
       const userInfo = result.data
       // 保存到state

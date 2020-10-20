@@ -96,7 +96,7 @@
           // 分发注册的异步action
           const {mobile, password, code} = this
           try {
-            await this.$store.dispatch('register', {mobile, password, code})
+            await this.$store.dispatch('register', {phone: mobile, password, code})
             // 成功了, 跳转到登陆
             this.$router.replace('/login')
           } catch(error) {

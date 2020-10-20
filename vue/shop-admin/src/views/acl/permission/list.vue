@@ -82,7 +82,11 @@
         
         <el-form-item label="组件" prop="component" v-if="permission.level!==1">
           <el-input v-model="permission.component" disabled v-if="permission.level===2"/>
+          <el-select v-model="permission.component" v-else-if="permission.level===3" @change="handleComponentChange">
+            <el-option :value="name" :label="name" v-for="name in asyncRouteNames" :key="name"></el-option>
+          </el-select>
           <el-select v-model="permission.component" v-else @change="handleComponentChange">
+            <el-option value="" label="非路由" key=""></el-option>
             <el-option :value="name" :label="name" v-for="name in asyncRouteNames" :key="name"></el-option>
           </el-select>
         </el-form-item>
@@ -182,7 +186,7 @@ export default {
   methods: {
 
     handleComponentChange (value) {
-      this.permission.path = asyncRoutes[value].path
+      this.permission.path = value && asyncRoutes[value].path
     },
 
     /* 

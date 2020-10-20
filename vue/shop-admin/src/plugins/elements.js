@@ -184,3 +184,6 @@ Vue.prototype.$confirm = confirm;
 Vue.prototype.$prompt = prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
+
+
+// this.$message('ttt')

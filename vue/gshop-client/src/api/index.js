@@ -48,8 +48,8 @@ export const reqDeleteCartItem = (skuId) => ajax.delete(`/cart/deleteCart/${skuI
 登陆
 /api/user/passport/login POST  mobile/password
 */
-export function reqLogin (mobile, password) {
-  return ajax.post('/user/passport/login', {mobile, password})
+export function reqLogin (phone, password) {
+  return ajax.post('/user/passport/login', {phone, password})
   // return ajax({
   //   url: '/user/passport/login',
   //   method: 'POST',

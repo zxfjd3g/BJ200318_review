@@ -91,7 +91,7 @@
         // 分发登陆的异步action
         const {mobile, password} = this
         try {
-          await this.$store.dispatch('login', {mobile, password})
+          await this.$store.dispatch('login', {phone: mobile, password})
           // 成功了, 跳转到首页(后面会优化)
           const redirect = this.$route.query.redirect
           this.$router.replace(redirect || '/')
